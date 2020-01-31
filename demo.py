@@ -5,7 +5,13 @@ from injunction import CommandHandler
 from injunction import CommandBus
 
 
-class Greeting(Command):
+class HandlerDependency:
+
+    def mutate_output(self, stuff_in: str):
+        return stuff_in + ': MUTATED'
+
+
+class Greet(Command):
 
     def __init__(self, greeting):
         self.greeting = greeting
@@ -16,12 +22,16 @@ class Greeting(Command):
 
 class Greeter(CommandHandler):
 
-    def handle(self, command: Greeting):
-        print(command.greeting)
+    def __init__(self):
+        self.handler_dependency = HandlerDependency()
+
+    def handle(self, command: Greet):
+        greeting = self.handler_dependency.mutate_output(command.greeting)
+        print(greeting)
 
 
 if __name__ == '__main__':
 
-    hello = Greeting('hello there')
+    hello = Greet('hello there')
 
     CommandBus.issue_synchronous(hello)
