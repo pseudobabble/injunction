@@ -22,8 +22,8 @@ class Greet(Command):
 
 class Greeter(CommandHandler):
 
-    def __init__(self):
-        self.handler_dependency = HandlerDependency()
+    def __init__(self, handler_dependency=HandlerDependency):
+        self.handler_dependency = handler_dependency()
 
     def handle(self, command: Greet):
         greeting = self.handler_dependency.mutate_output(command.greeting)
